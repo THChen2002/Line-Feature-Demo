@@ -47,12 +47,11 @@ from linebot.v3.messaging import (
     CarouselColumn,
     ImageCarouselColumn,
     QuickReply,
-    QuickReplyItem
+    QuickReplyItem,
+    RichMenuRequest
 )
 import line_flex
 import os
-import requests
-import json
 
 app = Flask(__name__)
 
@@ -307,21 +306,17 @@ def reply_message(event, messages):
             )
         )
         
-def create_rich_menu():
+def init_rich_menu():
     with ApiClient(configuration) as api_client:
         line_bot_api = MessagingApi(api_client)
         line_bot_blob_api = MessagingApiBlob(api_client)
         
-        headers = {
-            'Authorization': 'Bearer ' + CHANNEL_ACCESS_TOKEN,
-            'Content-Type': 'application/json'
-        }
-        body = {
+        rich_menu_str = """{
             "size": {
                 "width": 1200,
                 "height": 810
             },
-            "selected": True,
+            "selected": true,
             "name": "richmenu",
             "chatBarText": "查看圖文選單",
             "areas": [
@@ -374,11 +369,11 @@ def create_rich_menu():
                 }
                 }
             ]
-        }
+        }"""
         
-        response = requests.post('https://api.line.me/v2/bot/richmenu', headers=headers, data=FlexContainer.from_json(body))
-        response = response.json()
-        rich_menu_id = response["richMenuId"]
+        rich_menu_id = line_bot_api.create_rich_menu(
+            rich_menu_request=RichMenuRequest.from_json(rich_menu_str)
+        ).rich_menu_id
         
         with open('static/richmenu.jpg', 'rb') as image:
             line_bot_blob_api.set_rich_menu_image(
@@ -388,7 +383,7 @@ def create_rich_menu():
             )
         line_bot_api.set_default_rich_menu(rich_menu_id)
         
-create_rich_menu()
+init_rich_menu()
     
 if __name__ == "__main__":
     app.run()
