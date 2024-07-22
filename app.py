@@ -15,6 +15,7 @@ from linebot.v3.messaging import (
     Configuration,
     ApiClient,
     MessagingApi,
+    MessagingApiBlob,
     ReplyMessageRequest,
     TextMessage,
     StickerMessage,
@@ -50,6 +51,8 @@ from linebot.v3.messaging import (
 )
 import line_flex
 import os
+import requests
+import json
 
 app = Flask(__name__)
 
@@ -303,6 +306,89 @@ def reply_message(event, messages):
                 messages=messages
             )
         )
+        
+def create_rich_menu():
+    with ApiClient(configuration) as api_client:
+        line_bot_api = MessagingApi(api_client)
+        line_bot_blob_api = MessagingApiBlob(api_client)
+        
+        headers = {
+            'Authorization': 'Bearer ' + CHANNEL_ACCESS_TOKEN,
+            'Content-Type': 'application/json'
+        }
+        body = {
+            "size": {
+                "width": 1200,
+                "height": 810
+            },
+            "selected": True,
+            "name": "richmenu",
+            "chatBarText": "查看圖文選單",
+            "areas": [
+                {
+                "bounds": {
+                    "x": 0,
+                    "y": 0,
+                    "width": 600,
+                    "height": 405
+                },
+                "action": {
+                    "type": "message",
+                    "text": "主選單"
+                }
+                },
+                {
+                "bounds": {
+                    "x": 601,
+                    "y": 0,
+                    "width": 600,
+                    "height": 405
+                },
+                "action": {
+                    "type": "message",
+                    "text": "Line Flex Message"
+                }
+                },
+                {
+                "bounds": {
+                    "x": 0,
+                    "y": 406,
+                    "width": 600,
+                    "height": 405
+                },
+                "action": {
+                    "type": "uri",
+                    "uri": "https://www.youtube.com"
+                }
+                },
+                {
+                "bounds": {
+                    "x": 601,
+                    "y": 406,
+                    "width": 600,
+                    "height": 405
+                },
+                "action": {
+                    "type": "uri",
+                    "uri": "https://www.youtube.com"
+                }
+                }
+            ]
+        }
+        
+        response = requests.post('https://api.line.me/v2/bot/richmenu', headers=headers, data=FlexContainer.from_json(body))
+        response = response.json()
+        rich_menu_id = response["richMenuId"]
+        
+        with open('static/richmenu.jpg', 'rb') as image:
+            line_bot_blob_api.set_rich_menu_image(
+                rich_menu_id=rich_menu_id,
+                body=bytearray(image.read()),
+                _headers={'Content-Type': 'image/jpeg'}
+            )
+        line_bot_api.set_default_rich_menu(rich_menu_id)
+        
+create_rich_menu()
     
 if __name__ == "__main__":
     app.run()
