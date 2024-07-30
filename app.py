@@ -81,7 +81,7 @@ def callback():
 @line_handler.add(MessageEvent, message=TextMessageContent)
 def handle_messsage(event):
     message = event.message.text
-    url_root = request.url_root.replace("http", "https")
+    url_root = request.url_root.replace("http:", "https:")
     if message == "主選單":
         flex_json = line_flex.main_line_flex_str()
         reply_message(event, [FlexMessage(alt_text=message, contents=FlexContainer.from_json(flex_json))])
