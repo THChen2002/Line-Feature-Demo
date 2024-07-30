@@ -305,7 +305,8 @@ def reply_message(event, messages):
                 messages=messages
             )
         )
-        
+
+# 設定rich menu(只需執行一次)
 def init_rich_menu():
     with ApiClient(configuration) as api_client:
         line_bot_api = MessagingApi(api_client)
@@ -383,7 +384,7 @@ def init_rich_menu():
             )
         line_bot_api.set_default_rich_menu(rich_menu_id)
         
-init_rich_menu()
+# init_rich_menu()
     
 if __name__ == "__main__":
     app.run()
