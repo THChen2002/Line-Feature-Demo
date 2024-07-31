@@ -479,9 +479,9 @@ def actions_line_flex_str():
                     "style": "primary",
                     "height": "sm",
                     "action": {
-                    "type": "message",
+                    "type": "postback",
                     "label": "Postback",
-                    "text": "Postback"
+                    "data": "Postback"
                     },
                     "color": "#01B468",
                     "margin": "sm"
@@ -503,9 +503,10 @@ def actions_line_flex_str():
                     "style": "primary",
                     "height": "sm",
                     "action": {
-                    "type": "message",
-                    "label": "Datetime picker",
-                    "text": "Datetime picker"
+                    "type": "datetimepicker",
+                    "data": "datetimepicker",
+                    "mode": "datetime",
+                    "label": "Datetime picker"
                     },
                     "color": "#B15BFF",
                     "margin": "sm"
