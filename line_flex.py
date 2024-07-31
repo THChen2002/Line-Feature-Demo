@@ -7,7 +7,7 @@ def main_line_flex_str():
             "contents": [
             {
                 "type": "text",
-                "text": "2024 國北教大教育大數據工作坊",
+                "text": "LineBot實作暨學習行為分析工作坊",
                 "color": "#ffffff",
                 "align": "center"
             }
@@ -99,7 +99,7 @@ def messages_line_flex_str():
             "contents": [
             {
                 "type": "text",
-                "text": "2024 國北教大教育大數據工作坊",
+                "text": "LineBot實作暨學習行為分析工作坊",
                 "color": "#ffffff",
                 "align": "center"
             }
@@ -288,7 +288,7 @@ def template_line_flex_str():
             "contents": [
             {
                 "type": "text",
-                "text": "2024 國北教大教育大數據工作坊",
+                "text": "LineBot實作暨學習行為分析工作坊",
                 "color": "#ffffff",
                 "align": "center"
             }
@@ -433,7 +433,7 @@ def actions_line_flex_str():
             "contents": [
             {
                 "type": "text",
-                "text": "2024 國北教大教育大數據工作坊",
+                "text": "LineBot實作暨學習行為分析工作坊",
                 "color": "#ffffff",
                 "align": "center"
             }
@@ -562,7 +562,7 @@ def flex_line_flex_str():
             "contents": [
             {
                 "type": "text",
-                "text": "2024 國北教大教育大數據工作坊",
+                "text": "LineBot實作暨學習行為分析工作坊",
                 "color": "#ffffff",
                 "align": "center"
             }
@@ -1560,7 +1560,7 @@ def scedule_line_flex_str():
                         },
                         {
                             "type": "text",
-                            "text": "Group presentation",
+                            "text": "Group Presentation",
                             "gravity": "center",
                             "size": "xs",
                             "color": "#8c8c8c"
