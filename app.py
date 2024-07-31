@@ -15,6 +15,7 @@ from linebot.v3.messaging import (
     Configuration,
     ApiClient,
     MessagingApi,
+    MessagingApiBlob,
     ReplyMessageRequest,
     TextMessage,
     StickerMessage,
@@ -46,7 +47,8 @@ from linebot.v3.messaging import (
     CarouselColumn,
     ImageCarouselColumn,
     QuickReply,
-    QuickReplyItem
+    QuickReplyItem,
+    RichMenuRequest
 )
 import line_flex
 import os
@@ -307,6 +309,102 @@ def reply_message(event, messages):
                 messages=messages
             )
         )
-    
+
+# 設定rich menu(只需執行一次)
+def init_rich_menu():
+    with ApiClient(configuration) as api_client:
+        line_bot_api = MessagingApi(api_client)
+        line_bot_blob_api = MessagingApiBlob(api_client)
+        
+        rich_menu_str = """{
+            "size": {
+                "width": 1200,
+                "height": 810
+            },
+            "selected": true,
+            "name": "richmenu",
+            "chatBarText": "查看圖文選單",
+            "areas": [
+                {
+                "bounds": {
+                    "x": 0,
+                    "y": 0,
+                    "width": 600,
+                    "height": 405
+                },
+                "action": {
+                    "type": "message",
+                    "text": "主選單"
+                }
+                },
+                {
+                "bounds": {
+                    "x": 601,
+                    "y": 0,
+                    "width": 600,
+                    "height": 405
+                },
+                "action": {
+                    "type": "message",
+                    "text": "Line Flex Message"
+                }
+                },
+                {
+                "bounds": {
+                    "x": 0,
+                    "y": 406,
+                    "width": 600,
+                    "height": 405
+                },
+                "action": {
+                    "type": "uri",
+                    "uri": "https://hackmd.io/@ntuebigdata/2024-linebot-workshop"
+                }
+                },
+                {
+                "bounds": {
+                    "x": 601,
+                    "y": 406,
+                    "width": 600,
+                    "height": 405
+                },
+                "action": {
+                    "type": "uri",
+                    "uri": "https://forms.gle/2CNSgh633sgf62Nd8"
+                }
+                }
+            ]
+        }"""
+        
+        rich_menu_id = line_bot_api.create_rich_menu(
+            rich_menu_request=RichMenuRequest.from_json(rich_menu_str)
+        ).rich_menu_id
+        
+        with open('./richmenu.jpg', 'rb') as image:
+            line_bot_blob_api.set_rich_menu_image(
+                rich_menu_id=rich_menu_id,
+                body=bytearray(image.read()),
+                _headers={'Content-Type': 'image/jpeg'}
+            )
+        line_bot_api.set_default_rich_menu(rich_menu_id)
+        
+# init_rich_menu()
+
+# 查詢rich menu
+# with ApiClient(configuration) as api_client:
+#     line_bot_api = MessagingApi(api_client)
+#     richmenulist = line_bot_api.get_rich_menu_list()
+
+# for rich_menu in richmenulist.richmenus:
+#     print(rich_menu.rich_menu_id)
+
+# 刪除所有rich menu
+# with ApiClient(configuration) as api_client:
+#     line_bot_api = MessagingApi(api_client)
+#     richmenulist = line_bot_api.get_rich_menu_list()
+
+# for rich_menu in richmenulist.richmenus:
+#     line_bot_api.delete_rich_menu(rich_menu.rich_menu_id)
+
 if __name__ == "__main__":
     app.run()
