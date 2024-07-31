@@ -354,7 +354,7 @@ def init_rich_menu():
                 },
                 "action": {
                     "type": "uri",
-                    "uri": "https://www.youtube.com"
+                    "uri": "https://hackmd.io/@ntuebigdata/2024-linebot-workshop"
                 }
                 },
                 {
@@ -366,7 +366,7 @@ def init_rich_menu():
                 },
                 "action": {
                     "type": "uri",
-                    "uri": "https://www.youtube.com"
+                    "uri": "https://forms.gle/2CNSgh633sgf62Nd8"
                 }
                 }
             ]
@@ -376,7 +376,7 @@ def init_rich_menu():
             rich_menu_request=RichMenuRequest.from_json(rich_menu_str)
         ).rich_menu_id
         
-        with open('static/richmenu.jpg', 'rb') as image:
+        with open('./richmenu.jpg', 'rb') as image:
             line_bot_blob_api.set_rich_menu_image(
                 rich_menu_id=rich_menu_id,
                 body=bytearray(image.read()),
@@ -385,6 +385,22 @@ def init_rich_menu():
         line_bot_api.set_default_rich_menu(rich_menu_id)
         
 # init_rich_menu()
-    
+
+# 查詢rich menu
+# with ApiClient(configuration) as api_client:
+#     line_bot_api = MessagingApi(api_client)
+#     richmenulist = line_bot_api.get_rich_menu_list()
+
+# for rich_menu in richmenulist.richmenus:
+#     print(rich_menu.rich_menu_id)
+
+# 刪除所有rich menu
+# with ApiClient(configuration) as api_client:
+#     line_bot_api = MessagingApi(api_client)
+#     richmenulist = line_bot_api.get_rich_menu_list()
+
+# for rich_menu in richmenulist.richmenus:
+#     line_bot_api.delete_rich_menu(rich_menu.rich_menu_id)
+
 if __name__ == "__main__":
     app.run()
